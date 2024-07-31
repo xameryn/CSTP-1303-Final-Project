@@ -31,7 +31,9 @@ More to follow, this current build is a test regarding cross-platform communicat
 #### Section 7: Images
 
 ![alt text](image.png)
+
 ![alt text](image-1.png)
+
 Java console log (message received)
 
 
