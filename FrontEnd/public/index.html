@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Fun Time</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Send Message to Java Backend</h1>
+    <input type="text" id="messageInput" placeholder="Enter your message" />
+    <button id="sendButton">Send</button>
+    <div id="serverResponse"></div>
+
+    <div id="box"></div>
+
+    <script src="movement.js"></script>
+    <script>
+        document.getElementById('sendButton').addEventListener('click', function () {
+            sendData({ message: document.getElementById('messageInput').value });
+        });
+
+        function sendData(data) {
+            const url = 'http://localhost:3000/send';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function recieveData() {
+            const url = 'http://localhost:3000/recieve';
+
+            fetch(url)
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+                document.getElementById('serverResponse').innerText = result.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
