@@ -11,13 +11,25 @@
     <input type="text" id="messageInput" placeholder="Enter your message" />
     <button id="sendButton">Send</button>
     <div id="serverResponse"></div>
+    <h3 id="speed">Speed: </h3>
 
-    <div id="box"></div>
+    <div id="player"></div>
 
     <script src="movement.js"></script>
     <script>
         document.getElementById('sendButton').addEventListener('click', function () {
             sendData({ message: document.getElementById('messageInput').value });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setInterval(function() {
+                var speedElement = document.getElementById('speed');
+                if (speedElement) {
+                    speedElement.textContent = 'Speed: ' + horizontalVelocity;
+                } else {
+                    console.error('Element with ID "speed" not found.');
+                }
+            }, 10);
         });
 
         function sendData(data) {
