@@ -13,24 +13,27 @@
     <div id="serverResponse"></div>
     <h3 id="speed">Speed: </h3>
 
-    <div id="player"></div>
+    <div id="player" class="physicsObject"></div>
+    <div id="floor" class="physicsObject arenaObject" data-jumping="false" data-jumps-remaining="3"></div>
+    <div id="wall" class="physicsObject arenaObject"></div>
+    <div id="box" class="physicsObject"></div>
 
-    <script src="movement.js"></script>
+    <script type="module" src="update.js"></script>
     <script>
         document.getElementById('sendButton').addEventListener('click', function () {
             sendData({ message: document.getElementById('messageInput').value });
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            setInterval(function() {
-                var speedElement = document.getElementById('speed');
-                if (speedElement) {
-                    speedElement.textContent = 'Speed: ' + horizontalVelocity;
-                } else {
-                    console.error('Element with ID "speed" not found.');
-                }
-            }, 10);
-        });
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     setInterval(function() {
+        //         var speedElement = document.getElementById('speed');
+        //         if (speedElement) {
+        //             speedElement.textContent = 'Speed: ' + horizontalVelocity;
+        //         } else {
+        //             console.error('Element with ID "speed" not found.');
+        //         }
+        //     }, 10);
+        // });
 
         function sendData(data) {
             const url = 'http://localhost:3000/send';
