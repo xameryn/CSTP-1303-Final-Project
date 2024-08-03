@@ -1,18 +1,23 @@
-import { applyGravity, isFalling, isCollidingWithWall } from './physics.js';
+// player.js
 
-const jumpStrength = 10;
+const jumpStrength = 20;
+const maxJumps = 3;
 const moveSpeed = 5;
 const friction = 0.8;
 const keys = {};
 const playerElement = document.getElementById('player');
+const playerData = playerElement.dataset;
+const playerStyle = playerElement.style;
 
 function keyListeners() {
     document.addEventListener('keydown', function(event) {
         keys[event.code] = true;
 
-        if (event.code === 'Space' && playerElement.dataset.jumpsRemaining > 0) {
-            playerElement.dataset.jumpsRemaining -= 1;
-            playerElement.dataset.verticalVelocity = jumpStrength;
+        if (event.code === 'Space' && playerData.jumpsRemaining > 0) {
+            playerData.jumpsRemaining -= 1;
+            // playerData.verticalVelocity = parseFloat(playerData.verticalVelocity) + parseFloat(jumpStrength);
+            playerData.verticalVelocity = parseFloat(jumpStrength);
+            console.log('Jumped');
         }
     });
 
@@ -21,79 +26,31 @@ function keyListeners() {
     });
 }
 
-function updatePlayer(physicsObjects) {
-    let verticalVelocity = parseFloat(playerElement.dataset.verticalVelocity) || 0;
-    let horizontalVelocity = parseFloat(playerElement.dataset.horizontalVelocity) || 0;
-    let horizontalPosition = parseFloat(playerElement.dataset.horizontalPosition) || (window.innerWidth / 2) - (playerElement.offsetWidth / 2);
-    let collisionSide = isCollidingWithWall(playerElement, physicsObjects);
-
-    if ((keys['KeyA'] && !keys['KeyD']) || (!keys['KeyA'] && keys['KeyD'])) {
-        if ((keys['KeyD'] && horizontalVelocity < 0) || (keys['KeyA'] && horizontalVelocity > 0)) {
-            horizontalVelocity *= 0.65;
-        } else {
-            horizontalVelocity = keys['KeyA'] ? -moveSpeed : moveSpeed;
-            horizontalVelocity = keys['ShiftLeft'] ? horizontalVelocity * 2 : horizontalVelocity;
-        }
-    } else {
-        horizontalVelocity *= friction;
-    }
-
-    if (Math.abs(horizontalVelocity) < 0.1) {
-        horizontalVelocity = 0;
-    }
-
-    // Handle collision with walls
-
-    if (isCollidingWithWall(playerElement, physicsObjects)) {
-        horizontalVelocity = 0;
-        console.log('colliding with wall');
-    }
-
-
-
-    // if (horizontalPosition - (playerElement.offsetWidth / 2) <= 0) {
-    //     horizontalPosition = 0 + (playerElement.offsetWidth / 2);
-    //     playerElement.dataset.jumpsRemaining = 3;
-    // } else if (horizontalPosition >= window.innerWidth - (playerElement.offsetWidth / 2)) {
-    //     horizontalPosition = window.innerWidth - (playerElement.offsetWidth / 2);
-    //     playerElement.dataset.jumpsRemaining = 3;
-    // }
-
-    // if (collisionObject) { // if colliding with wall
-    //     if (horizontalVelocity > 0) { // Moving right
-    //         playerElement.style.left = `${collisionObject.left - playerElement.offsetWidth}px`;
-    //     } else if (horizontalVelocity < 0) { // Moving left
-    //         playerElement.style.left = `${collisionObject.right}px`;
-    //     }
-    //     horizontalVelocity = 0;
-    // }
-
-    horizontalPosition += horizontalVelocity;
-
-    playerElement.style.left = `${horizontalPosition}px`;
-    playerElement.style.bottom = `${parseInt(playerElement.style.bottom || 0) + verticalVelocity}px`;
-    playerElement.dataset.horizontalPosition = horizontalPosition;
-    playerElement.dataset.horizontalVelocity = horizontalVelocity;
-
-    // Handle collision with physics objects
-    if (isFalling(playerElement, physicsObjects)) {
-        verticalVelocity = 0;
-        playerElement.dataset.verticalVelocity = 0;
-        playerElement.dataset.jumpsRemaining = 3;
-    } else {
-        applyGravity(playerElement);
-    }
-
-    
+function initializePlayer() {
+    playerStyle.left = `${(window.innerWidth / 2) - (playerElement.offsetWidth / 2)}px`;
+    playerStyle.bottom = '50%';
+    playerData.jumpStrength = 10;
+    playerData.jumpsRemaining = maxJumps;
+    playerData.jumpsLimit = maxJumps;
+    playerData.verticalVelocity = 0;
+    playerData.horizontalVelocity = 0;
+    playerData.horizontalPosition = (window.innerWidth / 2) - (playerElement.offsetWidth / 2);
 }
 
-function initializePlayer() {
-    playerElement.style.left = `${(window.innerWidth / 2) - (playerElement.offsetWidth / 2)}px`;
-    playerElement.style.bottom = '50%';
-    playerElement.dataset.jumpsRemaining = 3;
-    playerElement.dataset.verticalVelocity = 0;
-    playerElement.dataset.horizontalVelocity = 0;
-    playerElement.dataset.horizontalPosition = (window.innerWidth / 2) - (playerElement.offsetWidth / 2);
+function updatePlayer() {
+    if ((keys['KeyA'] && !keys['KeyD']) || (!keys['KeyA'] && keys['KeyD'])) {
+        if ((keys['KeyD'] && playerData.horizontalVelocity < 0) || (keys['KeyA'] && playerData.horizontalVelocity > 0)) {
+            playerData.horizontalVelocity *= 0.65;
+        } else {
+            playerData.horizontalVelocity = keys['KeyA'] ? -moveSpeed : moveSpeed;
+            playerData.horizontalVelocity = keys['ShiftLeft'] ? playerData.horizontalVelocity * 2 : playerData.horizontalVelocity;
+        }
+    } else playerData.horizontalVelocity *= friction; // Apply friction if no movement keys are pressed
+
+    if (Math.abs(playerData.horizontalVelocity) < 0.1) playerData.horizontalVelocity = 0; // Stop horizontal movement if velocity is very low
+
+    // Reset jump counter on ground
+    // if (!handleCollisions(playerElement, physicsObjects)) playerData.jumpsRemaining = 3;
 }
 
 export { keyListeners, initializePlayer, updatePlayer };

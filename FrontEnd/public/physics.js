@@ -1,100 +1,86 @@
-const gravity = 0.3;
+const gravity = 0.8;
+
+function physics(object, physicsObjects) {
+    if (!handleCollisions(object, physicsObjects)) {
+        // console.log('Stopped falling due to collision');
+        return;
+    }
+    applyGravity(object);
+}
 
 function applyGravity(object) {
     let verticalVelocity = parseFloat(object.dataset.verticalVelocity) || 0;
     verticalVelocity -= gravity;
     object.dataset.verticalVelocity = verticalVelocity;
-    object.style.bottom = `${parseInt(object.style.bottom || 0) + verticalVelocity}px`;
 }
 
-function isFalling(object, physicsObjects) {
-    const objectRect = object.getBoundingClientRect();
+function handleCollisions(object, physicsObjects) {
+    const primaryRect = object.getBoundingClientRect();
+    let isFalling = true;
 
     for (const otherObject of physicsObjects) {
         if (otherObject === object) continue;
+        if (object.classList.contains('arenaObject') && otherObject.classList.contains('arenaObject')) continue;
+        if (otherObject.id === 'player') continue;
+
         const otherRect = otherObject.getBoundingClientRect();
 
-        // Check for collision
-        if (objectRect.bottom >= otherRect.top &&
-            objectRect.top <= otherRect.bottom &&
-            objectRect.right >= otherRect.left &&
-            objectRect.left <= otherRect.right) {
-            
-            // Stop falling
-            object.dataset.verticalVelocity = 0;
+        if (primaryRect.bottom >= otherRect.top && // Object is below other object
+            primaryRect.top <= otherRect.bottom && // Object is above other object
+            primaryRect.right >= otherRect.left && // Object is to the right of other object
+            primaryRect.left <= otherRect.right) { // Object is to the left of other object
 
-            // Snap to the top of the other object if both sides of the object are intersecting with the other object
-            if (objectRect.left < otherRect.right && objectRect.right > otherRect.left) {
-                object.style.bottom = `${window.innerHeight - otherRect.top}px`;
+            const overlapBottom = primaryRect.bottom - otherRect.top;
+            const overlapTop = otherRect.bottom - primaryRect.top;
+            const overlapRight = primaryRect.right - otherRect.left;
+            const overlapLeft = otherRect.right - primaryRect.left;
+
+            const minOverlap = Math.min(overlapBottom, overlapTop, overlapRight, overlapLeft);
+
+            // console.log(`Collision detected. Min overlap: ${minOverlap}, overlaps: B(${overlapBottom}), T(${overlapTop}), R(${overlapRight}), L(${overlapLeft})`);
+
+            if (minOverlap === overlapBottom) { // Handle vertical collision - bottom face
+                if (object.dataset.verticalVelocity <= 0) {
+                    if (object.id === 'player') object.dataset.jumpsRemaining = object.dataset.jumpsLimit;
+                    object.dataset.verticalVelocity = 0;
+                    object.style.bottom = `${window.innerHeight - otherRect.top}px`;
+                }
+                isFalling = false;
+            } else if (minOverlap === overlapTop) { // Handle vertical collision - top face
+                object.dataset.verticalVelocity = 0;
+                object.style.bottom = `${window.innerHeight - otherRect.bottom - primaryRect.height}px`;
+            } else if (minOverlap === overlapRight) { // Handle horizontal collision - right face
+                if (object.dataset.horizontalVelocity >= 0) {
+                    if (!otherObject.classList.contains('arenaObject')) { // push non-arena objects
+                        otherObject.style.left = `${parseFloat(object.dataset.horizontalPosition) + parseFloat(primaryRect.width)}px`;
+                    }
+                    else {
+                        object.dataset.horizontalVelocity = 0;
+                        object.style.left = `${otherRect.left - primaryRect.width}px`;
+                    }
+                }
+            } else if (minOverlap === overlapLeft) { // Handle horizontal collision - left face
+                if (object.dataset.horizontalVelocity <= 0) {
+                    if (!otherObject.classList.contains('arenaObject')) { // push non-arena objects
+                        otherObject.style.left = `${parseFloat(object.dataset.horizontalPosition) - parseFloat(primaryRect.width)}px`;
+                    }
+                    else {
+                        object.dataset.horizontalVelocity = 0;
+                        object.style.left = `${otherRect.right}px`;
+                    }
+                }
             }
-
-            // Assuming the object is positioned using 'bottom' style property
-            // object.style.bottom = `${window.innerHeight - otherRect.top}px`;
-
-            return true;
-        }
-    }
-    return false;
-}
-
-function isCollidingWithWall(object, physicsObjects) {
-    const objectRect = object.getBoundingClientRect();
-    const collisions = [];
-
-    for (const otherObject of physicsObjects) {
-        if (otherObject === object) continue;
-        const otherRect = otherObject.getBoundingClientRect();
-
-        // Check for collision with the left side of the other object
-        if (objectRect.right >= otherRect.left &&
-            objectRect.left < otherRect.left &&
-            objectRect.bottom > otherRect.top &&
-            objectRect.top < otherRect.bottom) {
-            
-            // Stop horizontal movement
-            object.dataset.horizontalVelocity = 0;
-
-            // Snap to the left side of the other object
-            object.style.left = `${otherRect.left - objectRect.width / 2}px`;
-
-            collisions.push('left');
-        }
-
-        // Check for collision with the right side of the other object
-        if (objectRect.left <= otherRect.right &&
-            objectRect.right > otherRect.right &&
-            objectRect.bottom > otherRect.top &&
-            objectRect.top < otherRect.bottom) {
-            
-            // Stop horizontal movement
-            object.dataset.horizontalVelocity = 0;
-
-            // Snap to the right side of the other object
-            object.style.left = `${otherRect.right + objectRect.width / 2}px`;
-
-            collisions.push('right');
         }
     }
 
-    console.log(collisions);
-
-    if (collisions.includes('left') && collisions.includes('right'))
-        return 'both';
-    if (!collisions.includes('left') || !collisions.includes('right'))
-        return null;
-    else
-        return collisions[0];
+    return isFalling;
 }
 
+function applyMotion(object) {
+    object.dataset.horizontalPosition = parseFloat(object.dataset.horizontalPosition) + parseFloat(object.dataset.horizontalVelocity);
 
-function physics(object, physicsObjects) {
-    if (isFalling(object, physicsObjects)) {
-        applyGravity(object);
-    }
-
-    if (isCollidingWithWall(object, physicsObjects)) {
-        object.dataset.horizontalVelocity = 0;
-    }
+    object.style.left = `${object.dataset.horizontalPosition}px`;
+    object.style.bottom = `${parseFloat(object.style.bottom || 0) + parseFloat(object.dataset.verticalVelocity)}px`;
 }
 
-export { applyGravity, physics, isFalling, isCollidingWithWall };
+export { applyGravity, physics, handleCollisions, applyMotion };
