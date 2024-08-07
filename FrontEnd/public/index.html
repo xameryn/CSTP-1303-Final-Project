@@ -21,11 +21,18 @@
         <div id="left-wall" class="physicsObject arenaObject"></div>
         <div id="right-wall" class="physicsObject arenaObject"></div>
 
-        <div id="platform-1a" class="physicsObject arenaObject"></div>
+        <div id="platform-container"></div>
 
         <!-- <div id="box" class="physicsObject"></div> -->
     </div>
 
+    <script>
+        window.setSocket = function(ws) {
+            window.socket = ws;
+        };
+    </script>
+    <script type="module" src="client.js"></script>
+    <script type="module" src="physics.js"></script>
     <script type="module" src="update.js"></script>
     <script>
         document.getElementById('sendButton').addEventListener('click', function () {
@@ -39,39 +46,6 @@
                 document.getElementById('info-view-2').textContent = 'H_Vel: ' + document.getElementById('player').dataset.verticalVelocity;
             }, 10);
         });
-
-        function sendData(data) {
-            const url = 'http://localhost:3000/send';
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log('Success:', result);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-
-        function recieveData() {
-            const url = 'http://localhost:3000/recieve';
-
-            fetch(url)
-            .then(response => response.json())
-            .then(result => {
-                console.log('Success:', result);
-                document.getElementById('serverResponse').innerText = result.message;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
     </script>
 </body>
 </html>

@@ -9,6 +9,8 @@ body {
     height: 50px;
     background-color: red;
     position: absolute;
+    /* background-image: url('https://cdn.donmai.us/sample/08/1c/__ononoki_yotsugi_monogatari_and_1_more_drawn_by_m_aoi_w__sample-081cb90ff13585b5e8e7e101f15a23c2.jpg'); */
+    background-size: cover;
 }
 
 .platform {
@@ -32,6 +34,9 @@ body {
     padding: 0%;
     background-color: green;
     position: absolute;
+}
+
+.antiGravity {
 }
 
 #floor {

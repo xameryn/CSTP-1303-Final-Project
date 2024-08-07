@@ -1,8 +1,10 @@
+let previousPlayerState = '';
+let previousPlatformsState = '';
+
 const gravity = 0.8;
 
 function physics(object, physicsObjects) {
-    if (handleCollisions(object, physicsObjects)[0] === false) {
-        // console.log('Stopped falling due to collision');
+    if (handleCollisions(object, physicsObjects)[0] === false || object.classList.contains('antiGravity')) {
         return;
     }
     applyGravity(object);
@@ -25,6 +27,13 @@ function handleCollisions(object, physicsObjects) {
         const overlap = calculateOverlap(primaryRect, otherRect);
 
         if (overlap) {
+
+            if (object.id === 'player' && otherObject.classList.contains('goal')) {
+                console.log('Goal reached');
+                // window.location.href = '/win';
+                window.alert('Goal reached');
+            }
+
             const {minOverlap, side} = overlap;
 
             if (side === 'bottom' && object.dataset.verticalVelocity <= 0) { // Vertical collision - bottom
@@ -117,5 +126,34 @@ function applyMotion(object) {
     object.style.bottom = `${bottomPosition}px`;
 }
 
+function sendUpdates() {
+    const playerElement = document.getElementById('player');
+    const playerState = playerElement.outerHTML;
 
-export { applyGravity, physics, handleCollisions, applyMotion };
+    const platformContainer = document.getElementById('platform-container');
+    const platformState = platformContainer.outerHTML;
+
+    if (window.socket && window.socket.readyState === WebSocket.OPEN) {
+        if (playerState !== previousPlayerState) {
+            const playerMessage = {
+                type: 'update',
+                id: 'player',
+                state: playerState
+            };
+            window.socket.send(JSON.stringify(playerMessage));
+            previousPlayerState = playerState;
+        }
+
+        if (platformState !== previousPlatformsState) {
+            const platformMessage = {
+                type: 'update',
+                id: 'platform',
+                state: platformState
+            };
+            window.socket.send(JSON.stringify(platformMessage));
+            previousPlatformsState = platformState;
+        }
+    }
+}
+
+export { applyGravity, physics, handleCollisions, applyMotion, sendUpdates };

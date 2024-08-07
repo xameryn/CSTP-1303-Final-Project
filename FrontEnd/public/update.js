@@ -1,14 +1,13 @@
-import { playerKeys, initializePlayer, updatePlayer } from './player.js';
-import { helperKeys, initializeObject } from './helper.js';
-import { physics, applyMotion } from './physics.js';
+import { initializePlayer, updatePlayer } from './player.js';
+import { physics, applyMotion, sendUpdates } from './physics.js';
+// import { helperKeys, initializeObject } from './helper.js';
 
 const physicsObjects = document.getElementsByClassName('physicsObject');
 
 document.addEventListener('DOMContentLoaded', function() {
     initializePlayer();
-    // initializeObject('box', 200, 100, 200, 100);
-    playerKeys();
-    helperKeys();
+    // playerKeys();
+    // helperKeys();
     setInterval(update, 16);
 });
 
@@ -23,5 +22,6 @@ function update() {
             physics(physicObject, physicsObjects);
             applyMotion(physicObject);
         }
+        sendUpdates();
     }
 }

@@ -17,7 +17,7 @@ function playerKeys() {
             playerData.jumpsRemaining -= 1;
             // playerData.verticalVelocity = parseFloat(playerData.verticalVelocity) + parseFloat(jumpStrength);
             playerData.verticalVelocity = parseFloat(jumpStrength);
-            console.log('Jumped');
+            // console.log('Jumped');
         }
     });
 

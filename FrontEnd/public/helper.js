@@ -32,8 +32,6 @@ function helperKeys() {
     document.addEventListener('contextmenu', function(event) {
         event.preventDefault();
     });
-
-    
 }
 
 function checkIntersection(objectDim) {
@@ -57,11 +55,15 @@ function initializeObject(objectId, objectDim, type) {
         const object = document.createElement('div');
         object.id = objectId;
         object.classList.add(type);
-        if (type === 'platform') object.classList.add('physicsObject');        
-        document.getElementById('gameArea').appendChild(object);
+        if (type === 'platform') {
+            object.classList.add('physicsObject');
+            object.classList.add('antiGravity');
+        }
+        document.getElementById('platform-container').appendChild(object);
 
         object.style.left =   `${objectDim.x}px`;
-        object.style.top = `${objectDim.y}px`; // accidental but negates gravity and fixes flipping on Y axis so keeping it in
+        object.style.top = `${objectDim.y}px`;
+        object.style.bottom = `${parseFloat(object.style.top) - objectDim.height}px`;
 
         object.style.width =  `${objectDim.width}px`;
         object.style.height = `${objectDim.height}px`;
