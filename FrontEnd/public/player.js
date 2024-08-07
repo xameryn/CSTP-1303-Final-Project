@@ -1,7 +1,7 @@
 // player.js
 
 const jumpStrength = 20;
-const maxJumps = 3;
+const maxJumps = 300;
 const moveSpeed = 5;
 const friction = 0.8;
 const keys = {};
@@ -9,7 +9,7 @@ const playerElement = document.getElementById('player');
 const playerData = playerElement.dataset;
 const playerStyle = playerElement.style;
 
-function keyListeners() {
+function playerKeys() {
     document.addEventListener('keydown', function(event) {
         keys[event.code] = true;
 
@@ -32,9 +32,9 @@ function initializePlayer() {
     playerData.jumpStrength = 10;
     playerData.jumpsRemaining = maxJumps;
     playerData.jumpsLimit = maxJumps;
+    playerData.moveSpeed = moveSpeed;
     playerData.verticalVelocity = 0;
     playerData.horizontalVelocity = 0;
-    playerData.horizontalPosition = (window.innerWidth / 2) - (playerElement.offsetWidth / 2);
 }
 
 function updatePlayer() {
@@ -45,12 +45,13 @@ function updatePlayer() {
             playerData.horizontalVelocity = keys['KeyA'] ? -moveSpeed : moveSpeed;
             playerData.horizontalVelocity = keys['ShiftLeft'] ? playerData.horizontalVelocity * 2 : playerData.horizontalVelocity;
         }
-    } else playerData.horizontalVelocity *= friction; // Apply friction if no movement keys are pressed
+    } 
+    // else playerData.horizontalVelocity *= friction; // Apply friction if no movement keys are pressed (moved to physics.js)
 
     if (Math.abs(playerData.horizontalVelocity) < 0.1) playerData.horizontalVelocity = 0; // Stop horizontal movement if velocity is very low
 
-    // Reset jump counter on ground
+    // Reset jump counter on ground (TODO: add to physics.js)
     // if (!handleCollisions(playerElement, physicsObjects)) playerData.jumpsRemaining = 3;
 }
 
-export { keyListeners, initializePlayer, updatePlayer };
+export { playerKeys, initializePlayer, updatePlayer };

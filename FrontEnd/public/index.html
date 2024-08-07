@@ -14,10 +14,17 @@
     <h3 id="info-view-1"></h3>
     <h3 id="info-view-2"></h3>
 
-    <div id="player" class="physicsObject"></div>
-    <div id="floor" class="physicsObject arenaObject" data-jumping="false" data-jumps-remaining="3"></div>
-    <!-- <div id="wall" class="physicsObject arenaObject"></div> -->
-    <div id="box" class="physicsObject" data-mass="100"></div>
+    <div id="gameArea">
+        <div id="player" class="physicsObject player"></div>
+        <div id="floor" class="physicsObject arenaObject"></div>
+        <!-- <div id="ceiling" class="physicsObject arenaObject"></div> -->
+        <div id="left-wall" class="physicsObject arenaObject"></div>
+        <div id="right-wall" class="physicsObject arenaObject"></div>
+
+        <div id="platform-1a" class="physicsObject arenaObject"></div>
+
+        <!-- <div id="box" class="physicsObject"></div> -->
+    </div>
 
     <script type="module" src="update.js"></script>
     <script>
