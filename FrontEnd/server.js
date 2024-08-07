@@ -32,8 +32,6 @@ const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
-    
-    // Determine the role based on the number of connected clients
     clientCount++;
     const role = clientCount === 1 ? 'player' : 'helper';
     ws.send(JSON.stringify({ role }));
@@ -49,7 +47,7 @@ wss.on('connection', (ws) => {
 
     ws.on('close', () => {
         console.log('Client disconnected');
-        clientCount--; // Adjust the count when a client disconnects
+        clientCount--;
     });
 });
 

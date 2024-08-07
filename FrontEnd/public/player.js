@@ -48,7 +48,7 @@ function updatePlayer() {
     } 
     // else playerData.horizontalVelocity *= friction; // Apply friction if no movement keys are pressed (moved to physics.js)
 
-    if (Math.abs(playerData.horizontalVelocity) < 0.1) playerData.horizontalVelocity = 0; // Stop horizontal movement if velocity is very low
+    if (Math.abs(playerData.horizontalVelocity) < 0.1) playerData.horizontalVelocity = 0; // Stop horizontal movement if velocity is low
 
     // Reset jump counter on ground (TODO: add to physics.js)
     // if (!handleCollisions(playerElement, physicsObjects)) playerData.jumpsRemaining = 3;
