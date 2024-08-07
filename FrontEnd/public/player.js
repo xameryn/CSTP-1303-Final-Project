@@ -1,7 +1,7 @@
 // player.js
 
 const jumpStrength = 20;
-const maxJumps = 300;
+const maxJumps = 1;
 const moveSpeed = 5;
 const friction = 0.8;
 const keys = {};

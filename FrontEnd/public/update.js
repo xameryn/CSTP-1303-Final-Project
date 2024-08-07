@@ -2,7 +2,7 @@ import { initializePlayer, updatePlayer } from './player.js';
 import { physics, applyMotion, sendUpdates } from './physics.js';
 // import { helperKeys, initializeObject } from './helper.js';
 
-const physicsObjects = document.getElementsByClassName('physicsObject');
+const physicsObjects = document.getElementsByClassName('physicsObject', 'goal');
 
 document.addEventListener('DOMContentLoaded', function() {
     initializePlayer();

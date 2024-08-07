@@ -7,7 +7,7 @@ const WebSocket = require('ws');
 
 const app = express();
 const port = 3000;
-let clientCount = 0;
+let clientCount = 1;
 
 // HTTP
 app.use(bodyParser.json());
@@ -32,8 +32,9 @@ const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
+    const role = clientCount % 2 ? 'player' : 'helper';
+    console.log(clientCount);
     clientCount++;
-    const role = clientCount === 1 ? 'player' : 'helper';
     ws.send(JSON.stringify({ role }));
 
     ws.on('message', (message) => {
@@ -46,11 +47,8 @@ wss.on('connection', (ws) => {
     });
 
     ws.on('close', () => {
-        console.log('Client disconnected');
-        clientCount--;
+        console.log('Client disconnected');        
     });
 });
-
-console.log('WebSocket server is running on ws://localhost:8080');
 
 console.log('WebSocket server is running on ws://localhost:8080');

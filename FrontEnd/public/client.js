@@ -50,10 +50,16 @@ function handleServerMessage(data) {
         helperKeys();
         playType = 'helper';
     }
+    document.getElementById('roleDisplay').textContent = `You are playing as: ${playType}`;
     if (data.type === 'update' && data.id === 'player' && playType === 'helper') {
         document.getElementById('player').outerHTML = data.state;
     }
     if (data.type === 'update' && data.id === 'platform' && playType === 'player') {
         document.getElementById('platform-container').outerHTML = data.state;
+        // change CSS class property
+        const dangerElements = document.getElementsByClassName('danger');
+        for (const element of dangerElements) {
+            element.style.opacity = 0;
+        }
     }
 }

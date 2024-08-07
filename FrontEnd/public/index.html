@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Fun Time</title>
+    <title>Buddy Hop</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Send Message to Java Backend</h1>
-    <input type="text" id="messageInput" placeholder="Enter your message" />
+    <h1>Welcome to Buddy Hop</h1>
+    <h2 id="roleDisplay">You are playing as: role</h2>
+    <!-- <input type="text" id="messageInput" placeholder="Enter your message" />
     <button id="sendButton">Send</button>
     <div id="serverResponse"></div>
     <h3 id="info-view-1"></h3>
-    <h3 id="info-view-2"></h3>
+    <h3 id="info-view-2"></h3> -->
 
     <div id="gameArea">
         <div id="player" class="physicsObject player"></div>
         <div id="floor" class="physicsObject arenaObject"></div>
-        <!-- <div id="ceiling" class="physicsObject arenaObject"></div> -->
+        <div id="ceiling" class="physicsObject arenaObject"></div>
         <div id="left-wall" class="physicsObject arenaObject"></div>
         <div id="right-wall" class="physicsObject arenaObject"></div>
 
@@ -34,7 +35,7 @@
     <script type="module" src="client.js"></script>
     <script type="module" src="physics.js"></script>
     <script type="module" src="update.js"></script>
-    <script>
+    <!-- <script>
         document.getElementById('sendButton').addEventListener('click', function () {
             sendData({ message: document.getElementById('messageInput').value });
         });
@@ -46,6 +47,6 @@
                 document.getElementById('info-view-2').textContent = 'H_Vel: ' + document.getElementById('player').dataset.verticalVelocity;
             }, 10);
         });
-    </script>
+    </script> -->
 </body>
 </html>
