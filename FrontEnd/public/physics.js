@@ -38,15 +38,18 @@ function handleCollisions(object, physicsObjects) {
                     platformContainer.removeChild(platformContainer.firstChild);
                 }
 
-                sendUpdates()
-                
+                object.dispatchEvent(new KeyboardEvent('keyup')); // not working
+
+                document.getElementById('title').textContent = 'You Win!';
+                setTimeout(() => {
+                    document.getElementById('title').textContent = 'Welcome to Buddy Hop';
+                }, 5000);
+
                 object.dataset.horizontalVelocity = 0;
                 object.dataset.verticalVelocity = 0;
                 object.style.left = '50%';
 
-                object.dispatchEvent(new KeyboardEvent('keyup')); // not working
-
-                window.alert('Goal reached');
+                // window.alert('Goal reached');
             }
 
             const { minOverlap, side } = overlap;
