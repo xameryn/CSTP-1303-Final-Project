@@ -4,10 +4,13 @@ let previousPlatformsState = '';
 const gravity = 0.8;
 
 function physics(object, physicsObjects) {
-    if (handleCollisions(object, physicsObjects)[0] === false || object.classList.contains('antiGravity')) { // If object is not falling or is antiGravity
-        return;
+    if (shouldApplyGravity(object, physicsObjects)) {
+        applyGravity(object);
     }
-    applyGravity(object);
+}
+
+function shouldApplyGravity(object, physicsObjects) {
+    return !(object.id === 'player' && handleCollisions(object, physicsObjects) === false || object.classList.contains('antiGravity'));
 }
 
 function applyGravity(object) {
@@ -28,32 +31,42 @@ function handleCollisions(object, physicsObjects) {
 
         if (overlap) {
 
-            console.log('object: ' + object.id + ' otherObject: ' + otherObject.id);
+            if (object.id === 'player' && otherObject.classList.contains('goal')) { // fix awaiting first confirmation
 
-            if (object.id === 'player' && otherObject.classList.contains('goal')) {
-                console.log('Goal reached');
-                // window.location.href = '/win';
+                const platformContainer = document.getElementById('platform-container');
+                while (platformContainer.firstChild) {
+                    platformContainer.removeChild(platformContainer.firstChild);
+                }
+
+                sendUpdates()
+                
+                object.dataset.horizontalVelocity = 0;
+                object.dataset.verticalVelocity = 0;
+                object.style.left = '50%';
+
+                object.dispatchEvent(new KeyboardEvent('keyup')); // not working
+
                 window.alert('Goal reached');
             }
 
-            const {minOverlap, side} = overlap;
+            const { minOverlap, side } = overlap;
 
-            if (side === 'bottom' && object.dataset.verticalVelocity <= 0) { // Vertical collision - bottom
+            if (side === 'bottom' && object.dataset.verticalVelocity <= 0) { // bottom collision
                 resetVerticalVelocity(object, otherRect.top);
                 isFalling = false;
-                if (object.id === 'player') object.dataset.jumpsRemaining = object.dataset.jumpsLimit; // Reset jump counter on ground
-            } else if (side === 'top') { // Vertical collision - top
-                object.dataset.verticalVelocity = 0;
-                // resetVerticalVelocity(object, otherRect.bottom - primaryRect.height);
-            } else if (side === 'right' || side === 'left') { // Horizontal collision - right or left
+                if (object.id === 'player') object.dataset.jumpsRemaining = object.dataset.jumpsLimit;
+            } else if (side === 'top') {
+                if (object.id === 'player') object.dataset.verticalVelocity = 0;
+            } else if (side === 'right' || side === 'left') {
                 handleHorizontalCollision(object, otherObject, side, primaryRect, otherRect);
             }
         }
     }
+
     return isFalling;
 }
 
-function shouldSkipCollision(object, otherObject) { // Skip collision checks for certain objects
+function shouldSkipCollision(object, otherObject) {
     return (
         otherObject === object ||
         otherObject.id === 'player' ||
@@ -68,15 +81,15 @@ function calculateOverlap(primaryRect, otherRect) {
     const overlapLeft = otherRect.right - primaryRect.left;
 
     const minOverlap = Math.min(overlapBottom, overlapTop, overlapRight, overlapLeft);
-    const side = minOverlap === overlapBottom ? 'bottom' : 
-                 minOverlap === overlapTop ? 'top' : 
+    const side = minOverlap === overlapBottom ? 'bottom' :
+                 minOverlap === overlapTop ? 'top' :
                  minOverlap === overlapRight ? 'right' : 'left';
 
-    if (primaryRect.bottom >= otherRect.top && 
-        primaryRect.top <= otherRect.bottom && 
-        primaryRect.right >= otherRect.left && 
+    if (primaryRect.bottom >= otherRect.top &&
+        primaryRect.top <= otherRect.bottom &&
+        primaryRect.right >= otherRect.left &&
         primaryRect.left <= otherRect.right) {
-        return {minOverlap, side};
+        return { minOverlap, side };
     }
     return null;
 }
@@ -99,11 +112,10 @@ function handlePushOrStop(object, otherObject, primaryRect, otherRect, direction
         object.dataset.isAgainstArena = false;
         if (otherObject.dataset.isAgainstArena) {
             object.dataset.horizontalVelocity = 0;
-        }
-        else {
+        } else {
             let weightDif = (otherRect.width * otherRect.height) / (primaryRect.width * primaryRect.height);
             weightDif = weightDif < 1 ? 1 : weightDif;
-            object.dataset.horizontalVelocity *= (1 / weightDif)
+            object.dataset.horizontalVelocity *= (1 / weightDif);
             otherObject.dataset.horizontalVelocity = object.dataset.horizontalVelocity;
         }
     } else {
@@ -115,7 +127,7 @@ function handlePushOrStop(object, otherObject, primaryRect, otherRect, direction
 
 function applyMotion(object) {
     let horizontalPosition = parseFloat(object.style.left) || 0;
-    if (object.dataset.horizontalVelocity == undefined) object.dataset.horizontalVelocity = 0;
+    if (object.dataset.horizontalVelocity === undefined) object.dataset.horizontalVelocity = 0;
     horizontalPosition += parseFloat(object.dataset.horizontalVelocity);
     object.style.left = `${horizontalPosition}px`;
 

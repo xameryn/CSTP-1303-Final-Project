@@ -55,7 +55,7 @@ function initializeObject(objectId, objectDim, type) {
         const object = document.createElement('div');
         object.id = objectId;
         object.classList.add(type);
-        if (type === 'platform') {
+        if (type === 'platform' || type === 'goal') {
             object.classList.add('physicsObject');
             object.classList.add('antiGravity');
         }
@@ -64,10 +64,9 @@ function initializeObject(objectId, objectDim, type) {
         object.style.left =   `${objectDim.x}px`;
         object.style.top = `${objectDim.y}px`;
         object.style.bottom = `${parseFloat(object.style.top) - objectDim.height}px`;
-
         object.style.width =  `${objectDim.width}px`;
-        object.style.height = `${objectDim.height}px`;
-
+        object.style.height = `${type === 'goal' ? objectDim.width : objectDim.height}px`;
+        
         console.log('Initialized object:', object);
     }
 }
