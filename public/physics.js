@@ -16,7 +16,7 @@ function shouldApplyGravity(object, physicsObjects) {
 function applyGravity(object) {
     let verticalVelocity = parseFloat(object.dataset.verticalVelocity) || 0;
     verticalVelocity -= gravity;
-    object.dataset.verticalVelocity = verticalVelocity;
+    object.dataset.verticalVelocity = verticalVelocity.toString();
 }
 
 function handleCollisions(object, physicsObjects) {
