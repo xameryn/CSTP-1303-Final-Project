@@ -17,9 +17,11 @@ The game will be a platformer where the player can find loot. The loot will be r
 - Message: the message being sent from the HTML/JS front end through the Express relay to the Java backend
 - Player Character: the in-game object representing the player, controllable using WASD keys and space bar
 More to follow, this current build is a test regarding cross-platform communication
+- Player Role: The first user to connect is assigned `player` their job is to reach the gold objective using WASD to control the Player Character
+- Helper Role: The second user to connect is assigned `helper`, they are able to place `help blocks` by dragging left-click, `danger zones` by dragging right-click, and `goal` by dragging middle-click
 
-#### Section 5: Data Design
-¯\\_(ツ)_/¯
+#### Section 5: Setup
+- To run this project, use Bun (or Babel with Node, though that would require some specific imports), run `server.js`, open the link provided to play, open the same link again for a second player to join
 
 #### Section 6: User Interface Design
 - A text input that holds the message to be sent to the backend server with a button to send the message
