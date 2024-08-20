@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializePlayer();
     // playerKeys();
     // helperKeys();
-    setInterval(update, 16);
+    setInterval(update, 8);
 });
 
 function update() {

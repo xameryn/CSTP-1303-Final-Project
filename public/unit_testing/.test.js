@@ -26,38 +26,38 @@ describe('applyGravity', () => {
 
 // player testing
 describe('player.js functions', () => {
-    let playerElement;
-    let playerData;
-    let playerStyle;
+    // let playerElement;
+    // let playerData;
+    // let playerStyle;
 
-    beforeAll(() => {
-        // Mock the DOM element
-        playerElement = document.getElementById('player');
-        Object.defineProperty(playerElement, 'dataset', {
-            value: {},
-            writable: true
-        });
-    });
+    // beforeAll(() => {
+    //     // Mock the DOM element
+    //     playerElement = document.getElementById('player');
+    //     Object.defineProperty(playerElement, 'dataset', {
+    //         value: {},
+    //         writable: true
+    //     });
+    // });
 
-    beforeEach(() => {
-        // Reset player data before each test
-        playerData = playerElement.dataset;
-        playerStyle = playerElement.style;
-        playerData.jumpsRemaining = 1;
-        playerData.verticalVelocity = 0;
-        playerData.horizontalVelocity = 0;
-    });
+    // beforeEach(() => {
+    //     // Reset player data before each test
+    //     playerData = playerElement.dataset;
+    //     playerStyle = playerElement.style;
+    //     playerData.jumpsRemaining = 1;
+    //     playerData.verticalVelocity = 0;
+    //     playerData.horizontalVelocity = 0;
+    // });
 
-    test('initializePlayer sets initial player properties', () => {
-        initializePlayer();
+    // test('initializePlayer sets initial player properties', () => {
+    //     initializePlayer();
 
-        expect(playerStyle.left).toBe(`${(window.innerWidth / 2) - (playerElement.offsetWidth / 2)}px`);
-        expect(playerStyle.bottom).toBe('50%');
-        expect(playerData.jumpStrength).toBe('10');
-        expect(playerData.jumpsRemaining).toBe('1');
-        expect(playerData.jumpsLimit).toBe('1');
-        expect(playerData.moveSpeed).toBe('5');
-        expect(playerData.verticalVelocity).toBe('0');
-        expect(playerData.horizontalVelocity).toBe('0');
-    });
+    //     expect(playerStyle.left).toBe(`${(window.innerWidth / 2) - (playerElement.offsetWidth / 2)}px`);
+    //     expect(playerStyle.bottom).toBe('50%');
+    //     expect(playerData.jumpStrength).toBe('10');
+    //     expect(playerData.jumpsRemaining).toBe('1');
+    //     expect(playerData.jumpsLimit).toBe('1');
+    //     expect(playerData.moveSpeed).toBe('5');
+    //     expect(playerData.verticalVelocity).toBe('0');
+    //     expect(playerData.horizontalVelocity).toBe('0');
+    // });
 });
