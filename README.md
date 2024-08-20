@@ -25,3 +25,6 @@ More to follow, this current build is a test regarding cross-platform communicat
 
 #### Section 6: User Interface Design
 - A `player` that can navigate a puzzle created by the `helper`.
+  - A `help blocks` can be jumped on by the `player`.
+  - A `danger zone` prevents the `helper` from placing a `help block`.
+  - A `goal` completes the level upon the `player character`s arrival.
