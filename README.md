@@ -1,7 +1,6 @@
-# Design Document
+# Buddy Hop Design Document
 
 #### Section 1: Project Description
-
 The main goal of this project is to have a multiplayer game with a client and server side component. Both the client-side and server side will be done via JavaScript, the visuals will be handled using HTML and CSS. Websockets will be used for communication between the clients and server, which will send the data of one client to the other for visual sync.
 
 #### Section 2: Overview
