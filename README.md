@@ -25,6 +25,4 @@ More to follow, this current build is a test regarding cross-platform communicat
 - To test, run `bun test` in CMD from the root of the project, this will display the test results, many tests had to be excluded due to the lack of a `document` object outside of a browser environment.
 
 #### Section 6: User Interface Design
-- A text input that holds the message to be sent to the backend server with a button to send the message
-- A red box that represents the player
-More to follow, this current build is a test regarding cross-platform communication
+- A `player` that can navigate a puzzle created by the `helper`.
