@@ -22,6 +22,7 @@ More to follow, this current build is a test regarding cross-platform communicat
 
 #### Section 5: Setup
 - To run this project, use Bun (or Babel with Node, though that would require some specific imports), run `server.js`, open the link provided to play, open the same link again for a second player to join
+- To test, run `bun test` in CMD from the root of the project, this will display the test results, many tests had to be excluded due to the lack of a `document` object outside of a browser environment.
 
 #### Section 6: User Interface Design
 - A text input that holds the message to be sent to the backend server with a button to send the message
