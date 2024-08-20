@@ -9,9 +9,9 @@ The game will be played in browser (HTML, JavaScrip, CSS), the browser will comm
 The game will be a platformer where the player can find loot. The loot will be randomly chosen from a loot-table on the server side and sent to the client.
 
 #### Section 3: System Architecture
-- Frontend: Data is collected from an HTML form.
-- Backend: Data is received via HTTP POST requests and then sent over a TCP connection.
-- Java Backend Server: Data is received via TCP and processed accordingly.
+- Frontend: Browser (HTML/CSS) for visuals.
+- Backend: Bun (JavaScript) server that manages syncing data, game logic, and physics.
+- Communication: Web Sockets between client and server.
 
 #### Section 4: Data Dictionary
 - Message: the message being sent from the HTML/JS front end through the Express relay to the Java backend
