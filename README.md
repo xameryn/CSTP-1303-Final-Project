@@ -14,7 +14,6 @@ The game will be a platformer where the player can find loot. The loot will be r
 - Communication: Web Sockets between client and server.
 
 #### Section 4: Data Dictionary
-- Message: the message being sent from the HTML/JS front end through the Express relay to the Java backend
 - Player Character: the in-game object representing the player, controllable using WASD keys and space bar
 More to follow, this current build is a test regarding cross-platform communication
 - Player Role: The first user to connect is assigned `player` their job is to reach the gold objective using WASD to control the Player Character
